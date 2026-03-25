@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تاقیکردنەوەی نێرگزییەت | کەناڵی کەسایەتی نێرگزی</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
+        body { font-family: 'Noto Sans Arabic', sans-serif; background-color: #000000; color: #f1f5f9; }
+        .card { background: #111111; border: 2px solid #d4af37; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
+        .gold-text { color: #d4af37; }
+        .gold-bg { background-color: #d4af37; }
+        .option-btn { transition: all 0.2s; border: 1px solid #333; background: #1a1a1a; color: #ccc; cursor: pointer; }
+        .option-btn:hover { background: #d4af37; border-color: #d4af37; color: black; transform: scale(1.02); }
+    </style>
+</head>
+<body class="p-4 md:p-10 flex flex-col items-center">
+
+    <div class="max-w-2xl w-full">
+        <div class="text-center mb-8">
+            <img src="https://i.postimg.cc/mD8Pz8V8/narsizm-logo.jpg" alt="Logo" class="w-32 h-32 mx-auto rounded-full border-2 border-[#d4af37] mb-4 shadow-lg">
+            <h1 class="text-3xl font-bold gold-text mb-2">تاقیکردنەوەی کەسایەتی نێرگزی</h1>
+            <a href="https://t.me/psycho_narsizm" target="_blank" class="text-slate-400 text-sm hover:text-[#d4af37] transition">ئامادەکردنی: کەناڵی کەسایەتی نێرگزی (کلیک بکە بۆ تێلیگرام)</a>
+            <div class="mt-4 h-1 w-32 gold-bg mx-auto rounded-full"></div>
+        </div>
+
+        <div id="quiz-container" class="card p-6 md:p-10 rounded-3xl">
+            <div id="question-box">
+                <div class="flex justify-between items-center mb-6">
+                    <span id="progress-text" class="text-xs font-bold gold-text uppercase tracking-widest">پرسیار</span>
+                    <div class="w-24 bg-zinc-800 h-2 rounded-full overflow-hidden">
+                        <div id="progress-line" class="gold-bg h-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <h2 id="q-text" class="text-xl md:text-2xl font-bold mb-10 leading-relaxed text-slate-100">بۆ دەستپێکردن کلیک بکە...</h2>
+                
+                <div id="options" class="grid grid-cols-1 gap-4"></div>
+            </div>
+
+            <div id="result-box" class="hidden text-right">
+                <h2 class="text-2xl font-bold text-center gold-text mb-8 border-b border-zinc-800 pb-4">ئەنجامی کۆتایی</h2>
+                <div id="final-score-display" class="text-center mb-8">
+                    <span id="score-circle" class="inline-block w-24 h-24 rounded-full border-4 border-[#d4af37] leading-[90px] text-3xl font-bold gold-text">0%</span>
+                </div>
+                <div id="analysis-text" class="space-y-4 leading-relaxed text-slate-300 bg-zinc-900/50 p-6 rounded-2xl"></div>
+                
+                <div class="mt-8 text-center border-t border-zinc-800 pt-6">
+                    <p class="text-sm text-slate-400 mb-2">بۆ زانیاری زیاتر سەردانی تێلیگرام بکە:</p>
+                    <a href="https://t.me/psycho_narsizm" class="gold-text font-bold hover:underline">t.me/psycho_narsizm</a>
+                </div>
+
+                <button onclick="location.reload()" class="mt-8 w-full bg-[#d4af37] text-black py-4 rounded-2xl font-bold hover:brightness-110 transition shadow-lg">دووبارە تاقیکردنەوە</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // تێبینی: من لێرەدا وێنەکەم لێنک کردووە بە نموونە، ئەگەر وێنەکە دیار نەبوو دەتوانیت فایلی وێنەکە لای خۆت دابنێیت
+        const questions = [
+            "حەز دەکەم هەمیشە من تەوەری قسە و سەرنجی خەڵک بم.",
+            "پێم وایە من کەسێکی زۆر تایبەتم و تەنها کەسە تایبەتەکان لێم تێدەگەن.",
+            "زۆربەی کات خەیاڵ بە سەرکەوتنی بێ سنوور و دەسەڵات و جوانی خۆمەوە دەکەم.",
+            "پێویستم بەوەیە بەردەوام لەلایەن دەوروبەرەوە ستایش بکرێم.",
+            "پێم وایە هەموو کەس شایەنی ئەوە نییە هاوڕێی من بێت.",
+            "من مافی خۆمە مامەڵەیەکی نایابترم لەگەڵ بکرێت بەراورد بە خەڵکی ئاسایی.",
+            "سوود لە خەڵک وەردەگرم بۆ ئەوەی بگەم بە ئەو ئامانجانەی دەمەوێت.",
+            "هەستی بەزەییم بۆ ئازار و ناخۆشییەکانی خەڵک زۆر کەمە.",
+            "پێم وایە زۆربەی خەڵک ئیرەییم پێ دەبەن.",
+            "زۆرجار بە غروور و لووتبەرزییەوە سەیری خەڵک دەکەم.",
+            "من شایەنی ئەوەم هەمیشە باشترین شتەکانم بۆ بێت بەبێ ماندووبوون.",
+            "بۆ من قورسە هەست بە بەرپرسیارێتی هەڵەکانم بکەم و دەیخەمە ملی کەسانی تر.",
+            "هەمیشە چاوەڕێم خەڵک کارەکانم بۆ ڕاپەڕێنن و خزمەتم بکەن.",
+            "هەست بە تووڕەییەکی زۆر دەکەم ئەگەر کەسێک ڕەخنەم لێ بگرێت.",
+            "من زۆر باش دەزانم چۆن خەڵک ڕازی بکەم تا ئەو شتە بکەن کە من دەمەوێت.",
+            "حەز دەکەم هەمیشە باسی دەستکەوتەکانم بکەم، تەنانەت ئەگەر زیادەڕەوییش بێت.",
+            "پێم وایە مرۆڤەکان ئامرازن بۆ گەیشتن بە بەرژەوەندییەکانم.",
+            "ئەگەر کەسێک لە من باشتر دەربکەوێت، هەوڵ دەدەم کەمبایەخی بکەم.",
+            "من زۆر درەنگ متمانە بە خەڵک دەکەم چونکە پێم وایە دەیانەوێت زیانم پێ بگەیەنن.",
+            "هەست دەکەم یاساکان تەنها بۆ خەڵکی ئاسایین و من دەتوانم بییانبەزێنم."
+        ];
+
+        let currentIdx = 0;
+        let totalScore = 0;
+
+        function showQuestion() {
+            const qText = document.getElementById('q-text');
+            const progressText = document.getElementById('progress-text');
+            const progressLine = document.getElementById('progress-line');
+            const optionsDiv = document.getElementById('options');
+
+            qText.innerText = questions[currentIdx];
+            progressText.innerText = `پرسیاری ${currentIdx + 1} لە ٢٠`;
+            progressLine.style.width = `${((currentIdx) / 20) * 100}%`;
+
+            optionsDiv.innerHTML = '';
+            const choices = ["بەهیچ شێوەیەک", "کەمێک وایە", "تا ڕادەیەک", "زۆر وایە", "بە تەواوی هاوڕام"];
+
+            choices.forEach((text, i) => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn w-full p-4 rounded-2xl text-right font-medium";
+                btn.innerText = text;
+                btn.onclick = () => {
+                    totalScore += (i + 1);
+                    currentIdx++;
+                    if (currentIdx < questions.length) showQuestion(); else showResult();
+                };
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function showResult() {
+            document.getElementById('question-box').classList.add('hidden');
+            document.getElementById('result-box').classList.remove('hidden');
+            const perc = Math.round((totalScore / 100) * 100);
+            document.getElementById('score-circle').innerText = `${perc}%`;
+            
+            let analysis = "";
+            if (perc <= 35) {
+                analysis = "<b class='gold-text text-xl'>ئاستی نزم (هاوسەنگ):</b><br>تۆ کەسایەتییەکی تەندروستت هەیە. متمانەت بەخۆت هەیە بەبێ ئەوەی هەوڵی نزمکردنەوەی کەسانی تر بدەیت. پەیوەندییەکانت لەسەر بنەمای ڕێزی دوولایەنەیە.";
+            } else if (perc <= 65) {
+                analysis = "<b class='gold-text text-xl'>ئاستی مامناوەند:</b><br>هەندێک خاسیەتی نێرگزی لە ڕەفتارەکانتدا بەدی دەکرێت. لەوانەیە زۆرجار پێویستت بە سەرنج بێت، بەڵام هێشتا دەتوانیت هەست بە بەرامبەرەکەت بکەیت. وریابە کە خۆپەرستی زاڵ نەبێت بەسەرتدا.";
+            } else {
+                analysis = "<b class='text-red-500 text-xl'>ئاستی بەرز (نێرگزی توند):</b><br>ئەنجامەکەت نیشانەی نێرگزییەتی بەهێزە. تۆ جیهان لە دەوری خۆت دەبینیت و زۆرجار هەستی کەسانی تر فەرامۆش دەکەیت. ئەمە زیان بە پەیوەندییەکانت دەگەیەنێت و پێویستە کار لەسەر هەستی 'بەزەیی' و 'گوێگرتن' بکەیت.";
+            }
+            document.getElementById('analysis-text').innerHTML = analysis;
+        }
+
+        showQuestion();
+    </script>
+</body>
+</html>
