@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تاقیکردنەوەی دەروونی | Psychology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
+        body { 
+            font-family: 'Noto Sans Arabic', sans-serif; 
+            background: linear-gradient(135deg, #0f1c2e 0%, #1a3a5f 100%); 
+            color: #f1f5f9; 
+            min-height: 100vh;
+        }
+        .gold-border { border: 2px solid #b8860b; }
+        .gold-text { color: #d4af37; }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        .option-btn { 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(184, 134, 11, 0.3);
+        }
+        .option-btn:hover { 
+            background: #b8860b; 
+            color: #000; 
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(184, 134, 11, 0.2);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-12">
+            <img src="https://i.postimg.cc/m2f06BqV/psychology-logo.jpg" alt="Logo" class="w-32 h-32 mx-auto rounded-full gold-border mb-6 shadow-2xl">
+            <h1 class="text-3xl font-bold gold-text tracking-wide mb-2 uppercase">کەناڵی دەروونزانی</h1>
+            <p class="text-slate-300 italic">ئامادەکردنی: موحەممەد عوسمان</p>
+            <div class="flex justify-center gap-4 mt-4">
+                <div class="h-[1px] w-20 bg-gradient-to-l from-transparent to-[#b8860b]"></div>
+                <div class="h-[1px] w-20 bg-gradient-to-r from-transparent to-[#b8860b]"></div>
+            </div>
+        </div>
+
+        <div id="quiz-container" class="glass-card p-8 md:p-12 rounded-[2rem] shadow-2xl relative overflow-hidden">
+            <div id="quiz-ui">
+                <div class="flex justify-between items-center mb-10">
+                    <span id="q-count" class="text-xs gold-text font-bold">پرسیاری ٠١ / ١٥</span>
+                    <div class="w-32 bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div id="bar" class="bg-[#b8860b] h-full transition-all duration-700" style="width: 6%"></div>
+                    </div>
+                </div>
+
+                <h2 id="question-text" class="text-xl md:text-2xl font-medium leading-relaxed mb-12 text-center h-24 flex items-center justify-center">
+                    بەخێر بێیت بۆ گەشتێکی قووڵ بۆ ناو ناخت...
+                </h2>
+
+                <div id="options-grid" class="grid grid-cols-1 gap-4">
+                    </div>
+            </div>
+
+            <div id="result-ui" class="hidden">
+                <div class="text-center mb-8">
+                    <div class="text-4xl mb-4">✨</div>
+                    <h2 class="text-2xl font-bold gold-text mb-2">ئەنجامی پشکنینی دەروونی</h2>
+                    <p class="text-slate-400 text-sm">بەپێی تیۆرییەکانی "جون بۆڵبی" و "ئەینزوۆرس"</p>
+                </div>
+                
+                <div id="analysis-box" class="space-y-6 text-slate-200 leading-relaxed text-right p-6 rounded-2xl bg-black/30 border border-white/5">
+                    </div>
+
+                <div class="mt-10 pt-6 border-t border-white/10 text-center">
+                    <p class="text-sm text-slate-400 mb-4">بۆ قووڵبوونەوەی زیاتر، پەیوەندی بە کەناڵەکەمانەوە بکە:</p>
+                    <a href="https://t.me/psychology644" class="inline-block gold-text font-bold text-lg hover:underline transition">t.me/psychology644</a>
+                </div>
+
+                <button onclick="location.reload()" class="mt-8 w-full py-4 rounded-xl gold-border gold-text font-bold hover:bg-[#b8860b] hover:text-black transition duration-500">دووبارە ئەنجامدانەوە</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { t: "کاتێک هاوبەشی ژیانم یان هاوڕێیەکم لە ڕووی سۆزدارییەوە دوور دەکەوێتەوە، یەکسەر هەست بە ترس و دڵەڕاوکێ دەکەم.", s: "anxious" },
+            { t: "متمانەکردن بە خەڵک و نزیکبوونەوەی سۆزداری لای من کارێکی ئاسان و ئارامە.", s: "secure" },
+            { t: "پێم باشە لە کێشە و خەمەکانمدا تەنها بم و ڕقم لەوەیە کەس سۆزم بۆ دەرببڕێت.", s: "avoidant" },
+            { t: "زۆرجار هەست دەکەم کەسەکان وەک من گرنگیم پێ نادەن و ئەمەش ئازارم دەدات.", s: "anxious" },
+            { t: "سەربەخۆیی بۆ من زۆر گرنگترە لەوەی وابەستەی کەسێکی تر بم.", s: "avoidant" },
+            { t: "کاتێک لە پەیوەندییەکدام، هەست بە ئارامی دەکەم و گومانم لە خۆشەویستی بەرامبەرەکەم نییە.", s: "secure" },
+            { t: "هەمیشە دەترسم ئەگەر کەسێک بە ڕاستی من بناسێت، وازم لێ بهێنێت.", s: "anxious" },
+            { t: "بۆ من قورسە باس لە هەستی ناوەوەم بکەم، تەنانەت بۆ نزیکترین کەسەکانم.", s: "avoidant" },
+            { t: "ئەگەر بەرامبەرەکەم پێویستی بە تەنهایی بێت، من لێی تێدەگەم و هەست بە هەڕەشە ناکەم.", s: "secure" },
+            { t: "هەست دەکەم هەمیشە من ئەو کەسەم کە زیاتر هەوڵ بۆ مانەوەی پەیوەندییەکان دەدەم.", s: "anxious" },
+            { t: "ژیانی من بەبێ پەیوەندی سۆزداریش زۆر باشە و پێویستم بە کەس نییە بۆ دڵخۆشی.", s: "avoidant" },
+            { t: "من دەتوانم بە ئاسانی داوای یارمەتی یان سۆز بکەم کاتێک هەست بە بێهێزی دەکەم.", s: "secure" },
+            { t: "زۆرجار نامەی زۆر دەنێرم یان پەیوەندی دەکەم تەنها بۆ ئەوەی دڵنیابمەوە کە هێشتا منی خۆشدەوێت.", s: "anxious" },
+            { t: "کاتێک پەیوەندییەک زۆر جدی دەبێت، من هەوڵ دەدەم کەمێک دوور بکەومەوە بۆ ئەوەی ئازاد بم.", s: "avoidant" },
+            { t: "باوەڕم وایە کە من شایەنی خۆشەویستیم و مرۆڤەکان دەتوانن جێگەی متمانە بن.", s: "secure" }
+        ];
+
+        let idx = 0;
+        let scores = { anxious: 0, avoidant: 0, secure: 0 };
+
+        function loadQ() {
+            const q = questions[idx];
+            document.getElementById('q-count').innerText = `پرسیاری ${idx + 1 < 10 ? '٠' : ''}${idx + 1} / ١٥`;
+            document.getElementById('question-text').innerText = q.t;
+            document.getElementById('bar').style.width = `${((idx + 1) / 15) * 100}%`;
+
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+
+            const answers = [
+                { text: "بە تەواوی لەگەڵمدا دەگونجێت", w: 3 },
+                { text: "هەندێک جار وایە", w: 2 },
+                { text: "بە هیچ شێوەیەک وا نیم", w: 1 }
+            ];
+
+            answers.forEach(a => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn p-5 rounded-2xl text-right font-medium";
+                btn.innerText = a.text;
+                btn.onclick = () => {
+                    scores[q.s] += a.w;
+                    idx++;
+                    if (idx < questions.length) loadQ(); else showFinal();
+                };
+                grid.appendChild(btn);
+            });
+        }
+
+        function showFinal() {
+            document.getElementById('quiz-ui').classList.add('hidden');
+            document.getElementById('result-ui').classList.remove('hidden');
+            
+            const maxCat = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            const box = document.getElementById('analysis-box');
+
+            if(maxCat === "secure") {
+                box.innerHTML = `<h3 class="text-xl font-bold text-green-400 mb-4 italic">بەستراوەیی جێگیر و تەندروست (Secure)</h3>
+                <p>تۆ خاوەن ناخێکی ئارام و جێگیریت. لە پەیوەندییەکانتدا نە دەترسیت و نە دەبیتە بارگرانی. تۆ دەزانیت چۆن سنوورەکان بپارێزیت و چۆنیش دڵت بۆ کەسێک بکەیتەوە. متمانەیەک لە ناخی تۆدا هەیە کە دەڵێت: "من شایەنی خۆشەویستیم و ئەوانی تریش دەتوانن جێگەی متمانە بن." ئەمە باشترین و بەهێزترین جۆری کەسایەتییە بۆ بەردەوامی ژیان.</p>`;
+            } else if(maxCat === "anxious") {
+                box.innerHTML = `<h3 class="text-xl font-bold text-orange-400 mb-4 italic">بەستراوەیی دڵەڕاوکێ (Anxious Preoccupied)</h3>
+                <p>تۆ کەسێکیت تینووی سۆز و دڵنیایی بەردەوامیت. ڕەگی ئەم هەستە دەگەڕێتەوە بۆ ترسی کۆن لە "جێهێشتن". تۆ زۆرجار وەڵامی نامە و کاتەکان بە مەترسی دەبینیت. پێویستە کار لەسەر "متمانە بەخۆبوون" بکەیت و بزانیت کە دڵخۆشی تۆ وابەستەی ڕەزامەندی کەسانی تر نییە. تۆ زۆر دەبەخشیت، بەڵام پێویستە فێری ئەوە بیت کەمێکیش بۆ خۆت بهێڵیتەوە.</p>`;
+            } else {
+                box.innerHTML = `<h3 class="text-xl font-bold text-red-400 mb-4 italic">بەستراوەیی دوورکەوتەوە (Dismissive-Avoidant)</h3>
+                <p>تۆ دیوارێکی بەرزت لە دەوری دڵت دروست کردووە. بۆ تۆ "سەربەخۆیی" قەڵغانێکە بۆ ئەوەی کەس ئازارت نەدات. کاتێک کەسێک لێت نزیک دەبێتەوە، هەست بە خنکان دەکەیت. ئەمە نیشانەی هێز نییە، بەڵکو میکانیزمێکی پاراستنە کە لە ڕابردوودا فێری بوویت. ژیان چێژی زیاترە کاتێک بوێری ئەوەت هەبێت پەردە لەسەر هەستەکانت لابدەیت و ڕێگە بدەیت کەسێک بە ڕاستی پێت بگات.</p>`;
+            }
+        }
+
+        loadQ();
+    </script>
+</body>
+</html>
